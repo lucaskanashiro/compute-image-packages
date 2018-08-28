@@ -18,6 +18,7 @@
 import os
 import subprocess
 import time
+import errno
 
 from google_compute_engine import constants
 
@@ -50,7 +51,7 @@ class OsLoginUtils(object):
     try:
       return subprocess.call([constants.OSLOGIN_CONTROL_SCRIPT, action])
     except OSError as e:
-      if e.errno == os.errno.ENOENT:
+      if e.errno == errno.ENOENT:
         return None
       else:
         raise
@@ -83,7 +84,7 @@ class OsLoginUtils(object):
     try:
       return subprocess.call([constants.OSLOGIN_NSS_CACHE_SCRIPT])
     except OSError as e:
-      if e.errno == os.errno.ENOENT:
+      if e.errno == errno.ENOENT:
         return None
       else:
         raise
@@ -94,7 +95,7 @@ class OsLoginUtils(object):
       try:
         os.remove(constants.OSLOGIN_NSS_CACHE)
       except OSError as e:
-        if e.errno != os.errno.ENOENT:
+        if e.errno != errno.ENOENT:
           raise
 
   def UpdateOsLogin(self, enable, duration=NSS_CACHE_DURATION_SEC):
